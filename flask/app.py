@@ -46,7 +46,7 @@ def articles ():
 def article (id):
     cur = mysql.connection.cursor()
     result = cur.execute('SELECT * FROM articles WHERE id = %s', [id])
-    article = result.fetchone()
+    article = cur.fetchone()
     return render_template('article.html',article = article )
 
 # register form class
@@ -83,8 +83,6 @@ def register ():
 # user login
 @app.route('/login', methods=['GET', 'POST'])
 def login ():
-    app.logger.info('-------------from login route-------------')
-
     if request.method == "POST" :
         username = request.form['username']
         password_check = request.form['password']
@@ -179,7 +177,7 @@ def add_article ():
 @is_logged_in
 def edit_article (id):
     cur= mysql.connection.cursor()
-    result = cur.execute("SELECT * FROM articles WHERE id = %s",[id])
+    cur.execute("SELECT * FROM articles WHERE id = %s",[id])
     article= cur.fetchone()
 
     form = ArticleForm(request.form)
