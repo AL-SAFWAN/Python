@@ -4,7 +4,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt 
 from functools import wraps
-from data import Articles
+
 
 app = Flask(__name__)
 LOG = create_logger(app)
@@ -18,7 +18,6 @@ app.config['MYSQL_CURSORCLASS']= 'DictCursor'
 
 # init mysql
 mysql= MySQL(app)
-Articles = Articles()
 
 # Home
 @app.route('/')
@@ -33,7 +32,14 @@ def about ():
 # Articles
 @app.route('/articles')
 def articles ():
-    return render_template('articles.html',articles = Articles )
+    cur = mysql.connection.cursor()
+    result = cur.execute('SELECT * FROM articles')
+    articles = cur.fetchall()
+    if result>0:
+        return render_template('articles.html', articles= articles)
+    else:
+        return render_template('articles.html', msg ="No Articles Found")
+    cur.close()
 
 # Single article 
 @app.route('/article/<string:id>/')
