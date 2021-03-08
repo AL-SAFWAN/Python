@@ -128,6 +128,7 @@ def is_logged_in(f):
     return wrap
 
 
+
 # Dashboard
 @app.route('/dashboard')
 @is_logged_in
@@ -144,6 +145,7 @@ def dashboard ():
 # Logout
 @app.route('/logout')
 @is_logged_in
+
 def logout ():
     session.clear()
     flash('You have been logged out', 'success')
@@ -170,7 +172,6 @@ def add_article ():
         flash('Article Created', 'success')
         return redirect(url_for('dashboard'))
     return render_template('add_article.html', form=form)
-
 
 
 if __name__ == '__main__':
