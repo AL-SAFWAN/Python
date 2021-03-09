@@ -1,6 +1,6 @@
 import axios from 'axios'
-import {createMessage} from './message'
-import {ADD_LEAD, DELETE_LEAD, GET_ERROR, GET_LEADS} from './type'
+import {createMessage, returnErrors} from './message'
+import {ADD_LEAD, DELETE_LEAD, GET_LEADS} from './type'
 
 export const getLeads = () => (dispatch, getState) => {
     axios
@@ -11,7 +11,7 @@ export const getLeads = () => (dispatch, getState) => {
           payload: res.data,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
   };
 
   export const deleteLead = (id) => (dispatch, getState) => {
@@ -37,14 +37,5 @@ export const getLeads = () => (dispatch, getState) => {
           payload: res.data,
         });
       })
-      .catch((err) =>{
-        const error = {
-          msg : err.response.data,
-          status : err.response.status
-        }
-        dispatch({
-          type : GET_ERROR,
-          payload: error}
-        )
-      } );
+      .catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
   };
