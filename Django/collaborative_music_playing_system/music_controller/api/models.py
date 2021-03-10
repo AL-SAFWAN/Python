@@ -1,6 +1,7 @@
 from django.db import models
-import string 
+import string
 import random
+
 
 def generate_unique_code():
     length = 6
@@ -12,8 +13,9 @@ def generate_unique_code():
 
     return code
 
-# basic rule in django is to have big models and thin views 
 # Create your models here.
+
+
 class Room(models.Model):
     code = models.CharField(max_length=8, default="", unique=True)
     host = models.CharField(max_length=50, unique=True)
