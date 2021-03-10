@@ -1,8 +1,26 @@
 import React, { Component } from 'react'
-import {Link} from 'react-router-dom'
-
-export default class Header extends Component {
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import {logout} from '../../actions/auth'
+export class Header extends Component {
+    static propTypes = {
+        auth: PropTypes.object.isRequired,
+        logout:PropTypes.func.isRequired
+    }
     render() {
+        const { isAuthenticated, user } = this.props.auth
+        const authLinks = (
+            <ul className="navbar-nav ml-auto mt-2 mt-lg-0" >
+                <span className='navbar-text mr-3'> <strong> {user ? `Welcome ${user.username}`: ''}</strong></span>
+                <li className="nav-item"> <button onClick ={this.props.logout} className='nav-link btn btn-info btn-sm text-light' to="/login">Logout</button></li>
+            </ul>)
+
+        const guestLinks = (
+            <ul className="navbar-nav ml-auto mt-2 mt-lg-0" >
+                <li className="nav-item"> <Link className='nav-link' to="/register">Register</Link></li>
+                <li className="nav-item"> <Link className='nav-link' to="/login">Login</Link></li>
+            </ul>)
         return (
             <nav className="navbar navbar-expand-sm navbar-light bg-light">
                 <div className="container">
@@ -11,14 +29,17 @@ export default class Header extends Component {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
                         <a className="navbar-brand" href="#">Lead Managers</a>
-                        <ul className="navbar-nav ml-auto mt-2 mt-lg-0" >
-                            <li className="nav-item"> <Link className='nav-link' to="/register">Register</Link></li>
-                            <li className="nav-item"> <Link className='nav-link' to="/login">Login</Link></li>
-                        </ul>
 
+                        {isAuthenticated? authLinks:guestLinks}
                     </div>
                 </div>
             </nav>
         )
     }
 }
+
+const mapStateToProps = state => ({
+    auth: state.auth
+})
+
+export default connect(mapStateToProps,{logout})(Header)

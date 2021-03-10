@@ -1,19 +1,32 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
+import {login} from '../../actions/auth'
 
-export class login extends Component {
+
+export class Login extends Component {
     state = {
         username: '',
-        password: '',
-        password2: ''
+        password: ''
     }
+
+    static propTypes={
+        login: PropTypes.func.isRequired,
+        isAuthenticated: PropTypes.bool
+    }
+
     onSubmit = e => {
         e.preventDefault()
-        console.log('submit')
+        this.props.login(this.state.username, this.state.password)
     }
     onChange = e => this.setState({ [e.target.name]: e.target.value })
 
     render() {
+        if(this.props.isAuthenticated){
+            return <Redirect to='/'></Redirect>
+        }
+
         const { username,  password } = this.state
 
         return (
@@ -57,5 +70,8 @@ export class login extends Component {
         );
     }
 }
+const mapStateToProps =state =>({
+    isAuthenticated: state.auth.isAuthenticated
+})
 
-export default login
+export default connect(mapStateToProps, {login})(Login)
