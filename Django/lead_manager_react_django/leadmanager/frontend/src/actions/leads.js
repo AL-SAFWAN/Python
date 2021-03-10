@@ -1,10 +1,10 @@
 import axios from 'axios'
 import {createMessage, returnErrors} from './message'
 import {ADD_LEAD, DELETE_LEAD, GET_LEADS} from './type'
-
+import {tokenConfig} from '../actions/auth'
 export const getLeads = () => (dispatch, getState) => {
     axios
-      .get('/api/leads/')
+      .get('/api/leads/',tokenConfig(getState))
       .then((res) => {
         dispatch({
           type: GET_LEADS,
@@ -16,7 +16,7 @@ export const getLeads = () => (dispatch, getState) => {
 
   export const deleteLead = (id) => (dispatch, getState) => {
     axios
-      .delete(`/api/leads/${id}/`)
+      .delete(`/api/leads/${id}/`, tokenConfig(getState))
       .then((res) => {
         dispatch(createMessage({ deleteLead: 'Lead Deleted' }));
         dispatch({
@@ -29,7 +29,7 @@ export const getLeads = () => (dispatch, getState) => {
 
   export const addLead = (lead) => (dispatch, getState) => {
     axios
-      .post(`/api/leads/`, lead)
+      .post(`/api/leads/`, lead, tokenConfig(getState))
       .then((res) => {
         dispatch(createMessage({ addLead: 'Lead Added' }));
         dispatch({
