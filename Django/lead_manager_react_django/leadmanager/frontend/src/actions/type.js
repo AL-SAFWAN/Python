@@ -5,3 +5,9 @@ export const ADD_LEAD= 'ADD_LEAD'
 export const GET_ERROR = 'GET_ERROR' 
 
 export const CREATE_MESSAGES = 'CREATE_MESSAGES'
+
+export const USER_LOADING = 'USER_LOADING'
+export const USER_LOADED = 'USER_LOADED'
+export const AUTH_ERROR = 'AUTH_ERROR'
+
+
