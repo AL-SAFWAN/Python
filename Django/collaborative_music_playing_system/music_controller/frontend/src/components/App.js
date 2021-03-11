@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import HomePage from './HomePage'
 
 class App extends Component {
-    render() {
-        return <><h1>Hello world</h1>
-        </>
+
+    constructor(props) {
+        super(props)
     }
+
+    render() {
+        return (
+          <div>
+            <HomePage />
+          </div>
+        );
+      }
 }
 
 ReactDOM.render(
