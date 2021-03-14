@@ -8,32 +8,32 @@ export default class RoomJoinPage extends Component {
       roomCode: '',
       error: ''
     }
-    this.handleTextFieldChange= this.handleTextFieldChange.bind(this)
-    this.roomButtonPressed= this.roomButtonPressed.bind(this)
+    this.handleTextFieldChange = this.handleTextFieldChange.bind(this)
+    this.roomButtonPressed = this.roomButtonPressed.bind(this)
 
   }
   handleTextFieldChange(e) {
     this.setState({
-      roomCode : e.target.value
+      roomCode: e.target.value
     })
   }
-  roomButtonPressed(){
+  roomButtonPressed() {
     console.log(this.state)
-    const reqOpt ={
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body:JSON.stringify({
-          code: this.state.roomCode
-        })
+    const reqOpt = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code: this.state.roomCode
+      })
     }
     fetch('/api/join-room', reqOpt).then(res => {
       res.json()
-      if(res.ok){
+      if (res.ok) {
         this.props.history.push(`/room/${this.state.roomCode}`)
-      }else{
-        this.setState({error: 'Room Not Found'})
+      } else {
+        this.setState({ error: 'Room Not Found' })
       }
-      })
+    })
 
   }
   render() {
@@ -58,7 +58,7 @@ export default class RoomJoinPage extends Component {
 
       <Grid item xs={12} align='center'>
         <Button color='primary' variant='contained'
-         onClick={this.roomButtonPressed}
+          onClick={this.roomButtonPressed}
         >Enter A Room</Button>
       </Grid>
       <Grid item xs={12} align='center'>
