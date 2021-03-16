@@ -14,31 +14,24 @@ export default class Room extends Component {
       song: {}
     };
     this.roomCode = this.props.match.params.roomCode;
-    this.getRoomDetails();
     this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
-    this.updateShowSettings = this.updateShowSettings.bind(this)
-
-    this.renderSettings = this.renderSettings.bind(this)
-    this.renderSettingButton = this.renderSettingButton.bind(this)
-    this.getRoomDetails = this.getRoomDetails.bind(this)
+    this.updateShowSettings = this.updateShowSettings.bind(this);
+    this.renderSettingsButton = this.renderSettingsButton.bind(this);
+    this.renderSettings = this.renderSettings.bind(this);
+    this.getRoomDetails = this.getRoomDetails.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
     this.getCurrentSong = this.getCurrentSong.bind(this);
-
+    this.getRoomDetails();
   }
 
   // using the pulling methods, since websocket is not supported with spotify   
+
   componentDidMount() {
-    this.interval = setInterval(this.getCurrentSong, 1000)
+    this.interval = setInterval(this.getCurrentSong, 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval)
-  }
-
-  updateShowSettings(val) {
-    this.setState({
-      showSettings: val,
-    })
+    clearInterval(this.interval);
   }
 
   getRoomDetails() {
@@ -67,7 +60,7 @@ export default class Room extends Component {
       .then((response) => response.json())
       .then((data) => {
         this.setState({ spotifyAuthenticated: data.status });
-        console.log(data);
+        console.log(data.status);
         if (!data.status) {
           fetch("/spotify/get-auth-url")
             .then((response) => response.json())
@@ -79,8 +72,6 @@ export default class Room extends Component {
   }
 
   getCurrentSong() {
-    console.log('calling get current song'
-    )
     fetch("/spotify/current-song")
       .then((response) => {
         if (!response.ok) {
@@ -106,11 +97,23 @@ export default class Room extends Component {
     });
   }
 
+  updateShowSettings(value) {
+    this.setState({
+      showSettings: value,
+    });
+  }
+
   renderSettings() {
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
-          <CreateRoomPage update={true} votesToSkip={this.state.votesToSkip} guestCanPause={this.state.guestCanPause} roomCode={this.roomCode} updateCallback={this.getRoomDetails} />
+          <CreateRoomPage
+            update={true}
+            votesToSkip={this.state.votesToSkip}
+            guestCanPause={this.state.guestCanPause}
+            roomCode={this.roomCode}
+            updateCallback={this.getRoomDetails}
+          />
         </Grid>
         <Grid item xs={12} align="center">
           <Button
@@ -121,22 +124,22 @@ export default class Room extends Component {
             Close
           </Button>
         </Grid>
-
-
-
       </Grid>
     );
   }
 
-  renderSettingButton() {
-    console.log('in render setting btn')
+  renderSettingsButton() {
     return (
-      <Grid item xs={12} align='center'>
-        <Button variant='contained' color='primary' onClick={() => this.updateShowSettings(true)}>
+      <Grid item xs={12} align="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => this.updateShowSettings(true)}
+        >
           Settings
         </Button>
       </Grid>
-    )
+    );
   }
 
   render() {
@@ -149,7 +152,7 @@ export default class Room extends Component {
           </Typography>
         </Grid>
         <Player {...this.state.song} />
-        {this.state.isHost ? this.renderSettingButton() : null}
+        {this.state.isHost ? this.renderSettingsButton() : null}
         <Grid item xs={12} align="center">
           <Button
             variant="contained"
